@@ -1,3 +1,7 @@
+// Copyright (c) 2024 George Azmaipharashvili. All rights reserved.
+// Permission is granted to HelloNova to use, modify and distribute this code.
+// All other entities are prohibited from using, modifying or distributing this code without explicit permission.
+
 precision highp float;
 
 uniform float time;

@@ -5,6 +5,9 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
+		paths: {
+			base: '/orb-shader-A341-9FA2-EF37-CC36',
+	  	},
 		adapter: adapter({fallback: 'index.html'})
 	}
 };

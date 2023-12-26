@@ -2,7 +2,7 @@
 // Permission is granted to HelloNova to use, modify and distribute this code.
 // All other entities are prohibited from using, modifying or distributing this code without explicit permission.
 
-precision highp float;
+precision mediump float;
 
 uniform float time;
 uniform vec2 resolution;
@@ -71,48 +71,38 @@ float star(vec2 uv, float s) {
     vec2 v = vec2(cos(a), sin(a));
     float s1 = smoothstep(1., 0.3, abs(dot(v, uv)) * 2. * sqrt(s) + smoothstep(-0.1, 1.2, 0.8 * length(uv)));
     v = vec2(cos(a + TAU * 0.25), sin(a + TAU * 0.25));
-    float s2 = smoothstep(1., 0.5, abs(dot(v, uv)) * 2.5 * sqrt(s) + length(uv) * 1.6);
+    float s2 = smoothstep(1., 0.5, abs(dot(v, uv)) * 2.5 * sqrt(s) + length(uv) * 1.5);
     float sm = mix(s1, 1., s2);
     return sm + max(0.0, 1. - sm - sqrt(length(uv * .5)) * 1.2);
 }
 
 vec3 scol(float n) {
-    const vec3 STAR_COLOR1 = vec3(.917, .153, .760);
-    const vec3 STAR_COLOR2 = vec3(.733, .160, .733);
-    const vec3 STAR_COLOR3 = vec3(.607, .149, .714);
-    const vec3 STAR_COLOR4 = vec3(.255, .560, .870);
-    const vec3 STAR_COLOR5 = vec3(.172, .835, .769);
-    const vec3 STAR_COLOR6 = vec3(.278, .843, .674);
     const float D = 1.0 / 6.0;
     if (n <= D) {
-        return STAR_COLOR1;
+        return vec3(.917, .153, .760);
     } else if (n <= D * 2.0) {
-        return STAR_COLOR2;
+        return vec3(.733, .160, .733);
     } else if (n <= D * 3.0) {
-        return STAR_COLOR3;
+        return vec3(.607, .149, .714);
     } else if (n <= D * 4.0) {
-        return STAR_COLOR4;
+        return vec3(.255, .560, .870);
     } else if (n <= D * 5.0) {
-        return STAR_COLOR5;
+        return vec3(.172, .835, .769);
     } else {
-        return STAR_COLOR6;
+        return vec3(.278, .843, .674);
     }
 }
 
 vec3 lcol(float n) {
-    const vec3 LINE_COLOR1 = vec3(.172, .122, .999);
-    const vec3 LINE_COLOR2 = vec3(.255, .560, .870);
-    const vec3 LINE_COLOR3 = vec3(.278, .843, .674);
-    const vec3 LINE_COLOR4 = vec3(.917, .153, .760);
     const float D = 1.0 / 4.0;
     if (n <= D) {
-        return LINE_COLOR1;
+        return vec3(.172, .122, .999);
     } else if (n <= D * 2.0) {
-        return LINE_COLOR2;
+        return vec3(.255, .560, .870);
     } else if (n <= D * 3.0) {
-        return LINE_COLOR3;
+        return vec3(.278, .843, .674);
     } else {
-        return LINE_COLOR4;
+        return vec3(.917, .153, .760);
     }
 }
 
@@ -148,44 +138,49 @@ vec4 orb(vec2 uv, float t, float min_res) {
     vec4 col = vec4(vec3(0, 0, .5), alpha);
     if (alpha > 0.0) {
         vec3 n = normalize(vec3(uv, sqrt(abs(1.0 - l))));
-        col.rgb -= n * 0.15;
+        col.rgb -= mask * n * 0.2;
 
         /// Reflections
+        float ls = sqrt(l);
         vec3 nr = vec3(normalize(uv), n.z);
-        nr.xy = rot2D(nr.xy, t);
-        float ref = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;
-        col.rgb += mask * pow(ref, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);
-        col.rgb += ref * ref * ref * ref * 0.25;
-        col.rgb += smoothstep(0.2, 0.4, pow(ref, 4.) * smoothstep(0.6, 0.5, l)) * ref;
-        col.a += mask * smoothstep(0.5, 1., ref);
+        nr.xy = rot2D(nr.xy, -t);
+        float r = mask * noise(nr.xy * l * ls * 2.) * .5;
+        r *= smoothstep(0.9, 0.8, ls);
+        col.a += r;
+        col.rgb += r * r;
+
+        nr.xy = rot2D(nr.xy, t * 1.2);
+        r = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;
+        col.rgb += mask * pow(r, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);
+        col.rgb += smoothstep(0.2, 0.4, pow(r, 4.) * smoothstep(0.6, 0.5, l)) * r;
+        col.a += mask * smoothstep(0.5, 1., r);
 
         nr.xy = rot2D(nr.xy, -t * 1.8);
-        ref = noise(nr.xy * l - 1361.26);
-        col.rgb += mask * pow(ref, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
-        col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * ref, 6.));
-        col.rgb += ref * ref * ref * ref * 0.25;
-        col.a += mask * smoothstep(0.5, 1., ref);
+        r = noise(nr.xy * l - 1361.26);
+        col.rgb += mask * pow(r, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
+        col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * r, 4.));
 
         nr.xy = rot2D(nr.xy, t * 1.4);
-        ref = noise(nr.xy * l - 513.26);
-        col.rgb += mask * pow(ref, 8.);
-        col.rgb = hue_shift(col.rgb, mask * -ref);
-        col.a += mask * smoothstep(0.5, 1., ref);
+        r = noise(nr.xy * l - 513.26);
+        col.rgb += mask * pow(r, 8.);
+        col.rgb = hue_shift(col.rgb, mask * -r);
+        col.a += mask * smoothstep(0.5, 1., r);
 
         nr.xy = rot2D(nr.xy, -t);
-        ref = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));
-        float a = mask * 16. * ref * smoothstep(0.2, 0.1, l) * l;
+        r = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));
+        float a = mask * 16. * r * smoothstep(0.2, 0.1, l) * l;
         col.a += a;
         col.rgb += a * .25;
         col.rgb += smoothstep(0.5, 0., a) * a;
 
         nr.xy = rot2D(nr.xy, -t * 2.4);
-        ref = noise(nr.xy * l + 221.126) * 0.35;
-        col.rgb = hue_shift(col.rgb, mask * ref);
-        col.rgb += ref * ref * ref * ref * 0.25;
-        col.a += mask * ref / (1. + l);
+        r = noise(nr.xy * l + 221.126) * 0.35;
+        col.rgb = hue_shift(col.rgb, mask * r);
+        col.rgb += r * r * r * r * 0.25;
+        col.a += mask * r / (1. + l);
         col.a = sqrt(col.a * 0.8);
         col.b = pow(col.b, 1.25);
+        col.rgb *= sqrt(abs(col.rgb));
 
         /// Stars
         const float STAR_FREQ = 12.;
@@ -206,9 +201,9 @@ vec4 orb(vec2 uv, float t, float min_res) {
         col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
         col.a += mask * pow(l + 0.1, 8.);
         
-        ref = noise(uv * l - 513.26) * 2. - 1.;
-        col.rgb += mask * pow(ref, 8.);
-        col.rgb = hue_shift(col.rgb, mask * ref);
+        r = noise(uv * l - 513.26) * 2. - 1.;
+        col.rgb += mask * pow(r, 8.);
+        col.rgb = hue_shift(col.rgb, mask * r);
 
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);
         col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.3) - uv.y * sin(t * 0.4)) - 1.));
@@ -226,8 +221,8 @@ vec4 orb(vec2 uv, float t, float min_res) {
 vec4 lines(vec2 uv, float t) {
     if (dot(uv, uv) < 1.) 
         return vec4(0);
-    const float N = 32.0;
-    const float G = 4.0;
+    const float N = 24.0;
+    const float G = N / 4.;
     t *= 0.3;
     vec4 col = vec4(0);
     vec2 nv = normalize(uv);
@@ -235,9 +230,9 @@ vec4 lines(vec2 uv, float t) {
         float j = mod(i, G);
         float k = floor(i / G);
         float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k), 2.) * 2. - 1.) * 0.3 * (j / G + 0.5);
-        float mask = smoothstep(0.01, 0.0, distance(nv * (1.0 + d), uv));
-        col.rgb += lcol(i / N) * mask;
-        col.a += mask * 0.7;
+        float m = 1. + d * d * 30.;
+        float mask = smoothstep(0.01 * m, 0.0, distance(nv * (1.0 + d), uv));
+        col.rgb += lcol(i / N) * mask / m;
     }
     return col;
 }

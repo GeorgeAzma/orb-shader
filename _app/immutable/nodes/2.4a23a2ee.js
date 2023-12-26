@@ -139,7 +139,7 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
     float f = 24.0 / min_res;\r
     float mask = smoothstep(1.0 + f, 1.0 - f, l);\r
     float alpha = sqrt(l) * mask;\r
-    vec4 col = vec4(vec3(0, 0, .5), alpha);\r
+    vec4 col = vec4(vec3(0.05, 0.05, .5), alpha);\r
     if (alpha > 0.0) {\r
         vec3 n = normalize(vec3(uv, sqrt(abs(1.0 - l))));\r
         col.rgb -= mask * n * 0.2;\r
@@ -215,8 +215,8 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
     \r
     if (alpha < 1.) {\r
         float glow = (1.0 - mask) * (2. - l);\r
-        col.a += glow;\r
-        col.rgb += glow * glow * glow * glow * 0.5;\r
+        col.a += glow * .8;\r
+        col.rgb += glow * glow * glow * 0.4;\r
     }\r
 \r
     return col;\r
@@ -233,7 +233,7 @@ vec4 lines(vec2 uv, float t) {\r
     for (float i = 0.; i < N; ++i) {\r
         float j = mod(i, G);\r
         float k = floor(i / G);\r
-        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k), 2.) * 2. - 1.) * 0.3 * (j / G + 0.5);\r
+        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k * 32.), 1.25) * 2. - 1.) * 0.3 * (j / G + 0.5);\r
         float m = 1. + d * d * 30.;\r
         float mask = smoothstep(0.01 * m, 0.0, distance(nv * (1.0 + d), uv));\r
         col.rgb += lcol(i / N) * mask / m;\r

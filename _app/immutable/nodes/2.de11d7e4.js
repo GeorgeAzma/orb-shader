@@ -210,7 +210,7 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
         col.rgb = hue_shift(col.rgb, mask * r);\r
 \r
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);\r
-        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.3) - uv.y * sin(t * 0.4)) - 1.));\r
+        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1. + col.g * 2. - col.r));\r
     } \r
     \r
     if (alpha < 1.) {\r

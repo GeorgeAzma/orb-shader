@@ -140,86 +140,92 @@ vec3 star_layer(vec2 uv, float t) {
 }
 
 vec4 orb(vec2 uv, float t, float min_res) {
-    float l = dot(uv, uv);
-    vec3 n = normalize(vec3(uv, sqrt(abs(1.0 - l))));
-    float f = 24.0 / min_res;
-    
     /// Initial  Orb
+    float l = dot(uv, uv);
+    float f = 24.0 / min_res;
     float mask = smoothstep(1.0 + f, 1.0 - f, l);
-    vec4 col = vec4(vec3(0, 0, .5), sqrt(l) * mask);
-    col.rgb -= n * 0.15;
+    float alpha = sqrt(l) * mask;
+    vec4 col = vec4(vec3(0, 0, .5), alpha);
+    if (alpha > 0.0) {
+        vec3 n = normalize(vec3(uv, sqrt(abs(1.0 - l))));
+        col.rgb -= n * 0.15;
 
-    /// Reflections
-    vec3 nr = vec3(normalize(uv), n.z);
-    nr.xy = rot2D(nr.xy, t);
-    float ref = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;
-    col.rgb += mask * pow(ref, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);
-    col.rgb += ref * ref * ref * ref * 0.25;
-    col.rgb += smoothstep(0.2, 0.4, pow(ref, 4.) * smoothstep(0.6, 0.5, l)) * ref;
-    col.a += mask * smoothstep(0.5, 1., ref);
+        /// Reflections
+        vec3 nr = vec3(normalize(uv), n.z);
+        nr.xy = rot2D(nr.xy, t);
+        float ref = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;
+        col.rgb += mask * pow(ref, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);
+        col.rgb += ref * ref * ref * ref * 0.25;
+        col.rgb += smoothstep(0.2, 0.4, pow(ref, 4.) * smoothstep(0.6, 0.5, l)) * ref;
+        col.a += mask * smoothstep(0.5, 1., ref);
 
-    nr.xy = rot2D(nr.xy, -t * 1.8);
-    ref = noise(nr.xy * l - 1361.26);
-    col.rgb += mask * pow(ref, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
-    col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * ref, 6.));
-    col.rgb += ref * ref * ref * ref * 0.25;
-    col.a += mask * smoothstep(0.5, 1., ref);
+        nr.xy = rot2D(nr.xy, -t * 1.8);
+        ref = noise(nr.xy * l - 1361.26);
+        col.rgb += mask * pow(ref, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
+        col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * ref, 6.));
+        col.rgb += ref * ref * ref * ref * 0.25;
+        col.a += mask * smoothstep(0.5, 1., ref);
 
-    nr.xy = rot2D(nr.xy, t * 1.4);
-    ref = noise(nr.xy * l - 513.26);
-    col.rgb += mask * pow(ref, 8.);
-    col.rgb = hue_shift(col.rgb, mask * -ref);
-    col.a += mask * smoothstep(0.5, 1., ref);
+        nr.xy = rot2D(nr.xy, t * 1.4);
+        ref = noise(nr.xy * l - 513.26);
+        col.rgb += mask * pow(ref, 8.);
+        col.rgb = hue_shift(col.rgb, mask * -ref);
+        col.a += mask * smoothstep(0.5, 1., ref);
 
-    nr.xy = rot2D(nr.xy, -t);
-    ref = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));
-    float a = mask * 16. * ref * smoothstep(0.2, 0.1, l) * l;
-    col.a += a;
-    col.rgb += a * .25;
-    col.rgb += smoothstep(0.5, 0., a) * a;
+        nr.xy = rot2D(nr.xy, -t);
+        ref = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));
+        float a = mask * 16. * ref * smoothstep(0.2, 0.1, l) * l;
+        col.a += a;
+        col.rgb += a * .25;
+        col.rgb += smoothstep(0.5, 0., a) * a;
 
-    nr.xy = rot2D(nr.xy, -t * 2.4);
-    ref = noise(nr.xy * l + 221.126) * 0.35;
-    col.rgb = hue_shift(col.rgb, mask * ref);
-    col.rgb += ref * ref * ref * ref * 0.25;
-    col.a += mask * ref / (1. + l);
-    col.a = sqrt(col.a * 0.8);
-    col.b = pow(col.b, 1.25);
+        nr.xy = rot2D(nr.xy, -t * 2.4);
+        ref = noise(nr.xy * l + 221.126) * 0.35;
+        col.rgb = hue_shift(col.rgb, mask * ref);
+        col.rgb += ref * ref * ref * ref * 0.25;
+        col.a += mask * ref / (1. + l);
+        col.a = sqrt(col.a * 0.8);
+        col.b = pow(col.b, 1.25);
 
-    /// Stars
-    const float STAR_FREQ = 12.;
-    float ts = t * STAR_ANIMATION_SPEED;
-    float ani = fract(ts);
+        /// Stars
+        const float STAR_FREQ = 12.;
+        float ts = t * STAR_ANIMATION_SPEED;
+        float ani = fract(ts);
+        
+        vec2 sn = vec2(cos(ts), sin(ts)) * noise(vec2(ts) * 0.3) * 0.1;
+        vec2 sv = n.xy / (ani + 2.) + sn;
+        vec3 stars1 = star_layer(sv * STAR_FREQ, t);
+
+        sv = n.xy / (ani + 1.) + sn;
+        vec3 stars2 = star_layer(sv * STAR_FREQ, t);
+        vec3 stars = mix(stars1, stars2, ani);
+
+        col.rgb = mix(col.rgb, stars, min(1.0, length(stars) * n.z * n.z * n.z * n.z * n.z * n.z * 2.));
+        col.a += mask * length(stars) * n.z * n.z * n.z * n.z;
+
+        col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
+        col.a += mask * pow(l + 0.1, 8.);
+        
+        ref = noise(uv * l - 513.26) * 2. - 1.;
+        col.rgb += mask * pow(ref, 8.);
+        col.rgb = hue_shift(col.rgb, mask * ref);
+
+        float df = mask * smoothstep(0.9 - f, 0.9 + f, l);
+        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.3) - uv.y * sin(t * 0.4)) - 1.));
+    } 
     
-    vec2 sn = vec2(cos(ts), sin(ts)) * noise(vec2(ts) * 0.3) * 0.1;
-    vec2 sv = n.xy / (ani + 2.) + sn;
-    vec3 stars1 = star_layer(sv * STAR_FREQ, t);
+    if (alpha < 1.) {
+        float glow = (1.0 - mask) * (2. - l);
+        col.a += glow;
+        col.rgb += glow * glow * glow * glow * 0.5;
+    }
 
-    sv = n.xy / (ani + 1.) + sn;
-    vec3 stars2 = star_layer(sv * STAR_FREQ, t);
-    vec3 stars = mix(stars1, stars2, ani);
-
-    col.rgb = mix(col.rgb, stars, min(1.0, length(stars) * n.z * n.z * n.z * n.z * n.z * n.z * 2.));
-    col.a += mask * length(stars) * n.z * n.z * n.z * n.z;
-
-    col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
-    col.a += mask * pow(l + 0.1, 8.);
-    
-    ref = noise(uv * l - 513.26) * 2. - 1.;
-    col.rgb += mask * pow(ref, 8.);
-    col.rgb = hue_shift(col.rgb, mask * ref);
-
-    float glow = (1.0 - mask) * (2. - l);
-    col.a += glow;
-    col.rgb += glow * glow * glow * glow * 0.5;
-
-    float df = mask * smoothstep(0.9 - f, 0.9 + f, l);
-    col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.3) - uv.y * sin(t * 0.4)) - 1.));
-    
     return col;
 }
 
 vec4 lines(vec2 uv, float t) {
+    if (dot(uv, uv) < 1.) 
+        return vec4(0);
     const float N = 32.0;
     const float G = 4.0;
     t *= 0.3;
@@ -240,6 +246,7 @@ void main()
 {
     float min_res = min(resolution.x, resolution.y);
     vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min_res * 1.25;
+    if (dot(uv, uv) > 2.) discard;
     float t = time * 0.5;
 
     vec3 col = vec3(0);

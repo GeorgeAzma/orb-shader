@@ -135,7 +135,7 @@ vec4 orb(vec2 uv, float t, float min_res) {
     float f = 24.0 / min_res;
     float mask = smoothstep(1.0 + f, 1.0 - f, l);
     float alpha = sqrt(l) * mask;
-    vec4 col = vec4(vec3(0, 0, .5), alpha);
+    vec4 col = vec4(vec3(0.05, 0.05, .5), alpha);
     if (alpha > 0.0) {
         vec3 n = normalize(vec3(uv, sqrt(abs(1.0 - l))));
         col.rgb -= mask * n * 0.2;
@@ -211,8 +211,8 @@ vec4 orb(vec2 uv, float t, float min_res) {
     
     if (alpha < 1.) {
         float glow = (1.0 - mask) * (2. - l);
-        col.a += glow;
-        col.rgb += glow * glow * glow * glow * 0.5;
+        col.a += glow * .8;
+        col.rgb += glow * glow * glow * 0.4;
     }
 
     return col;

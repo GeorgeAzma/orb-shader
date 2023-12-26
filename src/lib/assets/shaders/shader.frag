@@ -18,7 +18,12 @@ float hash21(vec2 p) {
     return fract(p.x * p.y);
 }
 
-float rand2D(vec2 n) { return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453); }
+float rand2D(vec2 p)
+{
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
 
 vec2 rand(vec2 p)
 {
@@ -61,13 +66,14 @@ vec3 aces(vec3 x) {
 }
 
 float star(vec2 uv, float s) {
-    uv *= 3.;
-    float a = mod(atan(uv.x, uv.y), TAU);
+    uv *= 2.5;
+    float a = atan(uv.x, uv.y);
     vec2 v = vec2(cos(a), sin(a));
     float s1 = smoothstep(1., 0.3, abs(dot(v, uv)) * 2. * sqrt(s) + smoothstep(-0.1, 1.2, 0.8 * length(uv)));
     v = vec2(cos(a + TAU * 0.25), sin(a + TAU * 0.25));
     float s2 = smoothstep(1., 0.5, abs(dot(v, uv)) * 2.5 * sqrt(s) + length(uv) * 1.6);
-    return mix(s1, 1., s2);
+    float sm = mix(s1, 1., s2);
+    return sm + max(0.0, 1. - sm - sqrt(length(uv * .5)) * 1.2);
 }
 
 vec3 scol(float n) {
@@ -125,7 +131,7 @@ vec3 star_layer(vec2 uv, float t) {
             p *= m;
             float s = star(p, 1. / m);
             vec3 color = scol(rand2D(id + offs));
-            color += max(0.0, 1. - 12. * length(p)) * .7;
+            color += max(0.0, 1. - 10. * pow(length(p), 1.3)) * .6;
             s *= 0.5 + 0.5 * sin(n * TAU + t);
             col += s * color;
         }
@@ -193,7 +199,7 @@ vec4 orb(vec2 uv, float t, float min_res) {
     vec3 stars2 = star_layer(sv * STAR_FREQ, t);
     vec3 stars = mix(stars1, stars2, ani);
 
-    col.rgb = mix(col.rgb, stars, min(1.0, length(stars) * n.z * n.z * n.z * n.z * n.z * n.z));
+    col.rgb = mix(col.rgb, stars, min(1.0, length(stars) * n.z * n.z * n.z * n.z * n.z * n.z * 2.));
     col.a += mask * length(stars) * n.z * n.z * n.z * n.z;
 
     col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
@@ -222,7 +228,7 @@ vec4 lines(vec2 uv, float t) {
     for (float i = 0.; i < N; ++i) {
         float j = mod(i, G);
         float k = floor(i / G);
-        float d = max(0., pow(noise(nv * .4 + t - j * .5 * 0.04 - k), 2.) * 2. - 1.) * 0.3 * (j / G + 0.5);
+        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k), 2.) * 2. - 1.) * 0.3 * (j / G + 0.5);
         float mask = smoothstep(0.01, 0.0, distance(nv * (1.0 + d), uv));
         col.rgb += lcol(i / N) * mask;
         col.a += mask * 0.7;

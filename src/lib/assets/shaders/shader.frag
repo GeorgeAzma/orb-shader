@@ -229,7 +229,7 @@ vec4 lines(vec2 uv, float t) {
     for (float i = 0.; i < N; ++i) {
         float j = mod(i, G);
         float k = floor(i / G);
-        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k), 2.) * 2. - 1.) * 0.3 * (j / G + 0.5);
+        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k * 32.), 1.25) * 2. - 1.) * 0.3 * (j / G + 0.5);
         float m = 1. + d * d * 30.;
         float mask = smoothstep(0.01 * m, 0.0, distance(nv * (1.0 + d), uv));
         col.rgb += lcol(i / N) * mask / m;

@@ -1,4 +1,4 @@
-import{s as A,n as v,o as D,b as E}from"../chunks/scheduler.e108d1fd.js";import{S,i as w,g as F,h as T,j as C,f as x,k as y,a as z,r as L,u as P,v as N,d as I,t as O,w as U}from"../chunks/index.7cf2deec.js";function B(c){let n;return{c(){n=F("canvas"),this.h()},l(e){n=T(e,"CANVAS",{id:!0,class:!0}),C(n).forEach(x),this.h()},h(){y(n,"id","background-shader"),y(n,"class","svelte-1yt0mdc")},m(e,o){z(e,n,o),c[3](n)},p:v,i:v,o:v,d(e){e&&x(n),c[3](null)}}}function q(c,n,e){let{frag:o=""}=n,{vert:f=""}=n,s,a,r,g=performance.now();const k=[-1,-1,1,-1,-1,1,1,1];let m;function u(){if(s&&(e(0,s.width=window.innerWidth,s),e(0,s.height=window.innerHeight,s),r&&a)){const t=r.getUniformLocation(a,"resolution");r.uniform2f(t,s.width,s.height),r.viewport(0,0,s.width,s.height)}}D(()=>{if(r=s.getContext("webgl"),!r){console.error("WebGL is not supported in this browser.");return}return m=r.createBuffer(),r.bindBuffer(r.ARRAY_BUFFER,m),r.bufferData(r.ARRAY_BUFFER,new Float32Array(k),r.STATIC_DRAW),r.enable(r.BLEND),r.blendFunc(r.SRC_ALPHA,r.ONE_MINUS_SRC_ALPHA),g=performance.now(),window.addEventListener("resize",u),p(f,o),()=>{window.removeEventListener("resize",u)}});function p(t,d){if(d||(d="precision mediump float;void main() {gl_FragColor=vec4(1);}"),t||(t="attribute vec4 a_position;void main() {gl_Position = a_position;}"),!r)return;const l=r.createShader(r.FRAGMENT_SHADER);if(!l){console.error("Could not create fragment shader"),r.deleteShader(l);return}if(r.shaderSource(l,d),r.compileShader(l),!r.getShaderParameter(l,r.COMPILE_STATUS)){const h=r.getShaderInfoLog(l);console.error("Fragment shader compilation error:",h)}const i=r.createShader(r.VERTEX_SHADER);if(!i){console.error("Could not create vertex shader"),r.deleteShader(i);return}if(r.shaderSource(i,t),r.compileShader(i),!r.getShaderParameter(i,r.COMPILE_STATUS)){const h=r.getShaderInfoLog(i);console.error("Vertex shader compilation error:",h)}if(a&&(r.deleteProgram(a),a=null),a=r.createProgram(),!a){console.error("Could not create shader program");return}r.attachShader(a,l),r.attachShader(a,i),r.linkProgram(a),r.deleteShader(l),r.deleteShader(i),r.useProgram(a);const _=r.getAttribLocation(a,"a_position");r.enableVertexAttribArray(_),r.vertexAttribPointer(_,2,r.FLOAT,!1,0,0),u(),b()}function b(){if(!(s&&r&&a))return;r.clearColor(0,0,0,0),r.clear(r.COLOR_BUFFER_BIT),r.useProgram(a),r.bindBuffer(r.ARRAY_BUFFER,m),r.drawArrays(r.TRIANGLE_STRIP,0,4);const t=r.getUniformLocation(a,"time");t&&r.uniform1f(t,(performance.now()-g)/1e3),requestAnimationFrame(b)}function R(t){E[t?"unshift":"push"](()=>{s=t,e(0,s)})}return c.$$set=t=>{"frag"in t&&e(1,o=t.frag),"vert"in t&&e(2,f=t.vert)},c.$$.update=()=>{c.$$.dirty&6&&p(f,o)},[s,o,f,R]}class M extends S{constructor(n){super(),w(this,n,q,B,A,{frag:1,vert:2})}}const G=`attribute vec4 a_position;\r
+import{s as A,n as v,o as F,b as D}from"../chunks/scheduler.e108d1fd.js";import{S,i as k,g as E,h as z,j as T,f as x,k as y,a as C,r as L,u as P,v as N,d as I,t as O,w as U}from"../chunks/index.7cf2deec.js";function B(c){let n;return{c(){n=E("canvas"),this.h()},l(e){n=z(e,"CANVAS",{id:!0,class:!0}),T(n).forEach(x),this.h()},h(){y(n,"id","background-shader"),y(n,"class","svelte-1yt0mdc")},m(e,t){C(e,n,t),c[3](n)},p:v,i:v,o:v,d(e){e&&x(n),c[3](null)}}}function M(c,n,e){let{frag:t=""}=n,{vert:f=""}=n,s,a,r,h=performance.now();const w=[-1,-1,1,-1,-1,1,1,1];let m;function u(){if(s&&(e(0,s.width=window.innerWidth,s),e(0,s.height=window.innerHeight,s),r&&a)){const o=r.getUniformLocation(a,"resolution");r.uniform2f(o,s.width,s.height),r.viewport(0,0,s.width,s.height)}}F(()=>{if(r=s.getContext("webgl"),!r){console.error("WebGL is not supported in this browser.");return}return m=r.createBuffer(),r.bindBuffer(r.ARRAY_BUFFER,m),r.bufferData(r.ARRAY_BUFFER,new Float32Array(w),r.STATIC_DRAW),r.enable(r.BLEND),r.blendFunc(r.SRC_ALPHA,r.ONE_MINUS_SRC_ALPHA),h=performance.now(),window.addEventListener("resize",u),p(f,t),()=>{window.removeEventListener("resize",u)}});function p(o,d){if(d||(d="precision mediump float;void main() {gl_FragColor=vec4(1);}"),o||(o="attribute vec4 a_position;void main() {gl_Position = a_position;}"),!r)return;const l=r.createShader(r.FRAGMENT_SHADER);if(!l){console.error("Could not create fragment shader"),r.deleteShader(l);return}if(r.shaderSource(l,d),r.compileShader(l),!r.getShaderParameter(l,r.COMPILE_STATUS)){const g=r.getShaderInfoLog(l);console.error("Fragment shader compilation error:",g)}const i=r.createShader(r.VERTEX_SHADER);if(!i){console.error("Could not create vertex shader"),r.deleteShader(i);return}if(r.shaderSource(i,o),r.compileShader(i),!r.getShaderParameter(i,r.COMPILE_STATUS)){const g=r.getShaderInfoLog(i);console.error("Vertex shader compilation error:",g)}if(a&&(r.deleteProgram(a),a=null),a=r.createProgram(),!a){console.error("Could not create shader program");return}r.attachShader(a,l),r.attachShader(a,i),r.linkProgram(a),r.deleteShader(l),r.deleteShader(i),r.useProgram(a);const b=r.getAttribLocation(a,"a_position");r.enableVertexAttribArray(b),r.vertexAttribPointer(b,2,r.FLOAT,!1,0,0),u(),_()}function _(){if(!(s&&r&&a))return;r.clearColor(0,0,0,0),r.clear(r.COLOR_BUFFER_BIT),r.useProgram(a),r.bindBuffer(r.ARRAY_BUFFER,m),r.drawArrays(r.TRIANGLE_STRIP,0,4);const o=r.getUniformLocation(a,"time");o&&r.uniform1f(o,(performance.now()-h)/1e3),requestAnimationFrame(_)}function R(o){D[o?"unshift":"push"](()=>{s=o,e(0,s)})}return c.$$set=o=>{"frag"in o&&e(1,t=o.frag),"vert"in o&&e(2,f=o.vert)},c.$$.update=()=>{c.$$.dirty&6&&p(f,t)},[s,t,f,R]}class q extends S{constructor(n){super(),k(this,n,M,B,A,{frag:1,vert:2})}}const G=`attribute vec4 a_position;\r
 \r
 void main() {\r
     gl_Position = a_position;\r
@@ -16,13 +16,7 @@ const float STAR_ANIMATION_SPEED = .25;\r
 \r
 const float TAU = 6.283185307;\r
 \r
-float hash21(vec2 p) {\r
-    p = fract(p * vec2(123.34, 456.21));\r
-    p += dot(p, p + 45.32);\r
-    return fract(p.x * p.y);\r
-}\r
-\r
-float rand2D(vec2 p)\r
+float hash21(vec2 p)\r
 {\r
 	vec3 p3  = fract(vec3(p.xyx) * .1031);\r
     p3 += dot(p3, p3.yzx + 33.33);\r
@@ -31,21 +25,22 @@ float rand2D(vec2 p)\r
 \r
 vec2 rand(vec2 p)\r
 {\r
-	p = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)));\r
-	return 2.0*fract(sin(p)*43758.5453123) - 1.0;\r
+    p -= 0.9;\r
+	vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973));\r
+    p3 += dot(p3, p3.yzx+33.33);\r
+    return fract((p3.xx+p3.yz)*p3.zy) * 2.0 - 1.0;\r
 }\r
 \r
 float noise(vec2 p)\r
 {\r
-	vec2 i = floor(p + (p.x+p.y)*0.366025404);\r
-    vec2 a = p - i + (i.x+i.y)*0.211324865;\r
-    float m = step(a.y,a.x); \r
-    vec2 o = vec2(m,1.0-m);\r
-    vec2 b = a - o + 0.211324865;\r
-	vec2 c = a - 1.0 + 2.0*0.211324865;\r
-    vec3 h = max(0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0);\r
-	vec3 n = h*h*h*h*vec3( dot(a,rand(i+0.0)), dot(b,rand(i+o)), dot(c,rand(i+1.0)));\r
-    return dot(n, vec3(70))*.5+.5;\r
+    const float kF = 3.0;\r
+    vec2 i = floor(p);\r
+	vec2 f = fract(p);\r
+    f = f*f*(3.0-2.0*f);\r
+    return mix(mix(sin(kF*dot(p, rand(i+vec2(0,0)))),\r
+               	   sin(kF*dot(p, rand(i+vec2(1,0)))),f.x),\r
+               mix(sin(kF*dot(p, rand(i+vec2(0,1)))),\r
+               	   sin(kF*dot(p, rand(i+vec2(1,1)))),f.x),f.y) * 0.5 + 0.5;\r
 }\r
 \r
 vec2 rot2D(vec2 v, float a) {\r
@@ -119,12 +114,13 @@ vec3 star_layer(vec2 uv, float t) {\r
         for(int x = -1; x <= 1; x++) {\r
             vec2 offs = vec2(x, y);\r
             float n = hash21(id + offs);\r
+            n *= n;\r
             vec2 p = gv - offs - vec2(n, fract(n * 34.)) + .5;\r
-            float m = .5 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;\r
-            m /= n;\r
+            float m = .75 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;\r
+            m /= n + 0.3;\r
             p *= m;\r
             float s = star(p, 1. / m);\r
-            vec3 color = scol(rand2D(id + offs));\r
+            vec3 color = scol(hash21(id + offs - 65.31));\r
             color += max(0.0, 1. - 10. * pow(length(p), 1.3)) * .6;\r
             s *= 0.5 + 0.5 * sin(n * TAU + t);\r
             col += s * color;\r
@@ -155,36 +151,35 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
 \r
         nr.xy = rot2D(nr.xy, t * 1.2);\r
         r = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;\r
-        col.rgb += mask * pow(r, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);\r
-        col.rgb += smoothstep(0.2, 0.4, pow(r, 4.) * smoothstep(0.6, 0.5, l)) * r;\r
+        col.rgb += 0.5 * mask * r * r * r * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.4, l);\r
         col.a += mask * smoothstep(0.5, 1., r);\r
 \r
         nr.xy = rot2D(nr.xy, -t * 1.8);\r
         r = noise(nr.xy * l - 1361.26);\r
-        col.rgb += mask * pow(r, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);\r
-        col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * r, 4.));\r
+        col.rgb += mask * r * r * r * r * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);\r
+        col.rgb = hue_shift(col.rgb, mask * -0.3 * r * r * r);\r
 \r
-        nr.xy = rot2D(nr.xy, t * 1.4);\r
+        nr.xy = rot2D(nr.xy, t * 1.45);\r
         r = noise(nr.xy * l - 513.26);\r
         col.rgb += mask * pow(r, 8.);\r
-        col.rgb = hue_shift(col.rgb, mask * -r);\r
+        col.rgb = hue_shift(col.rgb, mask * -r * r);\r
         col.a += mask * smoothstep(0.5, 1., r);\r
 \r
         nr.xy = rot2D(nr.xy, -t);\r
-        r = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));\r
+        r = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 33.));\r
         float a = mask * 16. * r * smoothstep(0.2, 0.1, l) * l;\r
         col.a += a;\r
         col.rgb += a * .25;\r
-        col.rgb += smoothstep(0.5, 0., a) * a;\r
 \r
         nr.xy = rot2D(nr.xy, -t * 2.4);\r
         r = noise(nr.xy * l + 221.126) * 0.35;\r
         col.rgb = hue_shift(col.rgb, mask * r);\r
         col.rgb += r * r * r * r * 0.25;\r
         col.a += mask * r / (1. + l);\r
-        col.a = sqrt(col.a * 0.8);\r
-        col.b = pow(col.b, 1.25);\r
-        col.rgb *= sqrt(abs(col.rgb));\r
+        col.a = aces(col.aaa).x;\r
+        col.rgb *= abs(col.rgb);\r
+        col.rgb = aces(col.rgb * 0.8) * 1.1;\r
+        col.a *= smoothstep(-0.3, 0.2, l);\r
 \r
         /// Stars\r
         const float STAR_FREQ = 12.;\r
@@ -205,9 +200,8 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
         col.rgb += mask * 0.25 * pow(l + 0.05, 4.);\r
         col.a += mask * pow(l + 0.1, 8.);\r
         \r
-        r = noise(uv * l - 513.26) * 2. - 1.;\r
-        col.rgb += mask * pow(r, 8.);\r
-        col.rgb = hue_shift(col.rgb, mask * r);\r
+        r = noise(uv * l * 1.5 - 513.26) - 0.5;\r
+        col.rgb = hue_shift(col.rgb, mask * r * 1.5);\r
 \r
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);\r
         col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1. + col.g * 2. - col.r));\r
@@ -264,4 +258,4 @@ void main()\r
     gl_FragColor.a = max(gl_FragColor.a, li.a);\r
 \r
     gl_FragColor.rgb = col;\r
-}`;function j(c){let n,e;return n=new M({props:{frag:H,vert:G}}),{c(){L(n.$$.fragment)},l(o){P(n.$$.fragment,o)},m(o,f){N(n,o,f),e=!0},p:v,i(o){e||(I(n.$$.fragment,o),e=!0)},o(o){O(n.$$.fragment,o),e=!1},d(o){U(n,o)}}}class W extends S{constructor(n){super(),w(this,n,null,j,A,{})}}export{W as component};
+}`;function j(c){let n,e;return n=new q({props:{frag:H,vert:G}}),{c(){L(n.$$.fragment)},l(t){P(n.$$.fragment,t)},m(t,f){N(n,t,f),e=!0},p:v,i(t){e||(I(n.$$.fragment,t),e=!0)},o(t){O(n.$$.fragment,t),e=!1},d(t){U(n,t)}}}class W extends S{constructor(n){super(),k(this,n,null,j,A,{})}}export{W as component};

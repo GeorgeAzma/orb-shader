@@ -12,13 +12,7 @@ const float STAR_ANIMATION_SPEED = .25;
 
 const float TAU = 6.283185307;
 
-float hash21(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
-    return fract(p.x * p.y);
-}
-
-float rand2D(vec2 p)
+float hash21(vec2 p)
 {
 	vec3 p3  = fract(vec3(p.xyx) * .1031);
     p3 += dot(p3, p3.yzx + 33.33);
@@ -27,21 +21,22 @@ float rand2D(vec2 p)
 
 vec2 rand(vec2 p)
 {
-	p = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)));
-	return 2.0*fract(sin(p)*43758.5453123) - 1.0;
+    p -= 0.9;
+	vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973));
+    p3 += dot(p3, p3.yzx+33.33);
+    return fract((p3.xx+p3.yz)*p3.zy) * 2.0 - 1.0;
 }
 
 float noise(vec2 p)
 {
-	vec2 i = floor(p + (p.x+p.y)*0.366025404);
-    vec2 a = p - i + (i.x+i.y)*0.211324865;
-    float m = step(a.y,a.x); 
-    vec2 o = vec2(m,1.0-m);
-    vec2 b = a - o + 0.211324865;
-	vec2 c = a - 1.0 + 2.0*0.211324865;
-    vec3 h = max(0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0);
-	vec3 n = h*h*h*h*vec3( dot(a,rand(i+0.0)), dot(b,rand(i+o)), dot(c,rand(i+1.0)));
-    return dot(n, vec3(70))*.5+.5;
+    const float kF = 3.0;
+    vec2 i = floor(p);
+	vec2 f = fract(p);
+    f = f*f*(3.0-2.0*f);
+    return mix(mix(sin(kF*dot(p, rand(i+vec2(0,0)))),
+               	   sin(kF*dot(p, rand(i+vec2(1,0)))),f.x),
+               mix(sin(kF*dot(p, rand(i+vec2(0,1)))),
+               	   sin(kF*dot(p, rand(i+vec2(1,1)))),f.x),f.y) * 0.5 + 0.5;
 }
 
 vec2 rot2D(vec2 v, float a) {
@@ -62,6 +57,10 @@ vec3 hue_shift(vec3 col, float hue) {
 }
 
 vec3 aces(vec3 x) {
+  return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
+}
+
+float aces(float x) {
   return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
 }
 
@@ -115,12 +114,13 @@ vec3 star_layer(vec2 uv, float t) {
         for(int x = -1; x <= 1; x++) {
             vec2 offs = vec2(x, y);
             float n = hash21(id + offs);
+            n *= n;
             vec2 p = gv - offs - vec2(n, fract(n * 34.)) + .5;
-            float m = .5 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;
-            m /= n;
+            float m = .75 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;
+            m /= n + 0.3;
             p *= m;
             float s = star(p, 1. / m);
-            vec3 color = scol(rand2D(id + offs));
+            vec3 color = scol(hash21(id + offs - 65.31));
             color += max(0.0, 1. - 10. * pow(length(p), 1.3)) * .6;
             s *= 0.5 + 0.5 * sin(n * TAU + t);
             col += s * color;
@@ -151,36 +151,35 @@ vec4 orb(vec2 uv, float t, float min_res) {
 
         nr.xy = rot2D(nr.xy, t * 1.2);
         r = noise(nr.xy * l) * 0.5 + noise(nr.xy * l * l + 31.61) * 0.5;
-        col.rgb += mask * pow(r, 4.) * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.5, l);
-        col.rgb += smoothstep(0.2, 0.4, pow(r, 4.) * smoothstep(0.6, 0.5, l)) * r;
+        col.rgb += 0.5 * mask * r * r * r * vec3(0.6, 1, 0.6) * smoothstep(0.6, 0.4, l);
         col.a += mask * smoothstep(0.5, 1., r);
 
-        nr.xy = rot2D(nr.xy, -t * 1.8);
+        nr.xy = rot2D(nr.xy, -t * 1.3);
         r = noise(nr.xy * l - 1361.26);
-        col.rgb += mask * pow(r, 4.) * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
-        col.rgb = hue_shift(col.rgb, 0.4 * pow(mask * r, 4.));
+        col.rgb += mask * r * r * r * r * vec3(0.6, 0.5, 1) * smoothstep(0.4, 0.2, l);
+        col.rgb = hue_shift(col.rgb, mask * -0.3 * r * r * r);
 
-        nr.xy = rot2D(nr.xy, t * 1.4);
+        nr.xy = rot2D(nr.xy, t * 1.45);
         r = noise(nr.xy * l - 513.26);
-        col.rgb += mask * pow(r, 8.);
-        col.rgb = hue_shift(col.rgb, mask * -r);
+        col.rgb += 0.5 * mask * pow(r, 4.);
+        col.rgb = hue_shift(col.rgb, mask * -r * r);
         col.a += mask * smoothstep(0.5, 1., r);
 
         nr.xy = rot2D(nr.xy, -t);
-        r = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 217.));
+        r = smoothstep(0.4, 1.5, noise(nr.xy * (0.5 + l) - 33.));
         float a = mask * 16. * r * smoothstep(0.2, 0.1, l) * l;
         col.a += a;
         col.rgb += a * .25;
-        col.rgb += smoothstep(0.5, 0., a) * a;
 
         nr.xy = rot2D(nr.xy, -t * 2.4);
         r = noise(nr.xy * l + 221.126) * 0.35;
         col.rgb = hue_shift(col.rgb, mask * r);
         col.rgb += r * r * r * r * 0.25;
         col.a += mask * r / (1. + l);
-        col.a = sqrt(col.a * 0.8);
-        col.b = pow(col.b, 1.25);
-        col.rgb *= sqrt(abs(col.rgb));
+        col.a = aces(col.a);
+        col.rgb *= abs(col.rgb);
+        col.rgb = aces(col.rgb * 0.8) * 1.1;
+        col.a *= smoothstep(-0.3, 0.2, l);
 
         /// Stars
         const float STAR_FREQ = 12.;
@@ -201,8 +200,7 @@ vec4 orb(vec2 uv, float t, float min_res) {
         col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
         col.a += mask * pow(l + 0.1, 8.);
         
-        r = noise(uv * l - 513.26) * 2. - 1.;
-        col.rgb += mask * pow(r, 8.);
+        r = noise(uv * l * 1.5 - 513.26 + t * 0.2) - 0.5;
         col.rgb = hue_shift(col.rgb, mask * r);
 
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);
@@ -223,13 +221,13 @@ vec4 lines(vec2 uv, float t) {
         return vec4(0);
     const float N = 24.0;
     const float G = N / 4.;
-    t *= 0.3;
+    t *= 0.4;
     vec4 col = vec4(0);
     vec2 nv = normalize(uv);
     for (float i = 0.; i < N; ++i) {
         float j = mod(i, G);
         float k = floor(i / G);
-        float d = max(0., pow(noise(nv * .4 + t - j * 0.02 - k * 32.), 1.25) * 2. - 1.) * 0.3 * (j / G + 0.5);
+        float d = max(0., noise(nv * .4 + t - j * 0.02 - k * 32.) * 2. - 1.25) * 0.2 * (j / G + 0.5);
         float m = 1. + d * d * 30.;
         float mask = smoothstep(0.01 * m, 0.0, distance(nv * (1.0 + d), uv));
         col.rgb += lcol(i / N) * mask / m;
@@ -242,7 +240,7 @@ void main()
     float min_res = min(resolution.x, resolution.y);
     vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min_res * 1.25;
     if (dot(uv, uv) > 2.) discard;
-    float t = time * 0.5;
+    float t = time * 0.75;
 
     vec3 col = vec3(0);
     vec4 orb = orb(uv, t, min_res);    

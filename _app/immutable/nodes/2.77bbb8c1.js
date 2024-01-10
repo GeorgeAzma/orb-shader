@@ -348,7 +348,7 @@ vec4 aurora_col(vec2 x) {\r
     vec3 n = get_normal(x);\r
     float a = aurora(x);\r
     float bands = fabric(x * vec2(12.0, a) + vec2(0.0, time * 0.1)) + 0.5 * a;\r
-    vec4 col = vec4(palette(a), sqrt(a) * n.y);\r
+    vec4 col = vec4(palette(a), 1.5 * sqrt(a) * n.y);\r
     col.a *= min(bands * bands, 1.0);\r
     // col.a = 1.0;\r
     // col.rgb = vec3(fbm(x));\r

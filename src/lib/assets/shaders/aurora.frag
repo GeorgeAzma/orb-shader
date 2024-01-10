@@ -91,7 +91,7 @@ vec4 aurora_col(vec2 x) {
     bands *= bands;
     vec4 col = vec4(palette(a), 1.5 * sqrt(a) * n.y);
     col.a *= min(bands + 0.3 * a * a, 1.0);
-    // col.a *= 2.0;
+    col.a *= 2.0;
     // col.a = 1.0;
     // col.rgb = vec3(a);
     return col; 

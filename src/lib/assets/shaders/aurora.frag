@@ -61,10 +61,8 @@ float fbm(vec2 x) {
     return worley(x + t + 3.0 * fabric(x * 0.5 - t - fabric(x * 0.5 + sin(t)))); 
 }
 
-vec4 palette(float x, float y) {
-    return vec4((sin(3.0 - vec3(2.15, -0.5, 1.2) - y * 2.) * 0.5 + 0.5), x);
-    // x = 1.0 - x;
-    // return vec4(sqrt(0.5 + 0.5 * cos(3.1415 * (vec3(1.0, 1.0, 0.2) * x + vec3(0.5, 0.2, 0.4)))), sqrt(2.0 - x * 2.0));
+vec3 palette(float x) {
+    return (sin(3.0 - vec3(2.15, -0.5, 1.2) - x * 2.) * 0.5 + 0.5);
 }
 
 float aurora(vec2 x) {
@@ -84,9 +82,11 @@ vec3 get_normal(vec2 uv) {
 vec4 aurora_col(vec2 x) {
     vec3 n = get_normal(x);
     float a = aurora(x);
-    float bands = fabric(x * vec2(16.0, 0.0) + x + a * 0.1) + 0.5 * a;
-    vec4 col = palette(3.0 * a * max(0.0, n.y), a);
+    float bands = fabric(x * vec2(12.0, a) + vec2(0.0, time * 0.1)) + 0.5 * a;
+    vec4 col = vec4(palette(a), 1.5 * sqrt(a) * n.y);
     col.a *= min(bands * bands, 1.0);
+    // col.a = 1.0;
+    // col.rgb = vec3(fbm(x));
     return col; 
 }
 

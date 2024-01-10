@@ -64,10 +64,14 @@ float fbm(vec2 x) {
 vec3 palette(float x) {
     return (sin(3.0 - vec3(2.15, -0.5, 1.2) - x * 2.) * 0.5 + 0.5);
 }
-
+vec2 rot_2d(vec2 v, float a) {
+	float s = sin(a);
+	float c = cos(a);
+	mat2 m = mat2(c, s, -s, c);
+	return m * v;
+}
 float aurora(vec2 x) {
-    vec2 p = x;
-    float a = fbm(p);
+    float a = fbm(x);
     return a;
 }
 
@@ -80,11 +84,15 @@ vec3 get_normal(vec2 uv) {
 }
 
 vec4 aurora_col(vec2 x) {
+    float t = time * 0.1;
     vec3 n = get_normal(x);
     float a = aurora(x);
-    float bands = fabric(x * vec2(12.0, a) + vec2(0.0, time * 0.1)) + 0.5 * a;
+    float bands = fabric(x * vec2(12.0, a) + vec2(0.0, t));
+    bands *= bands;
     vec4 col = vec4(palette(a), 1.5 * sqrt(a) * n.y);
-    col.a *= min(bands * bands, 1.0);
+    col.a *= mix(min(bands, 1.0), 1.0, a * a * a);
+    col.a *= 2.0;
+    col.b *= 1.0 + bands * bands * 0.5;
     // col.a = 1.0;
     // col.rgb = vec3(fbm(x));
     return col; 

@@ -90,17 +90,16 @@ vec4 aurora_col(vec2 x) {
     float bands = fabric(x * vec2(12.0, a) + vec2(0.0, t));
     bands *= bands;
     vec4 col = vec4(palette(a), 1.5 * sqrt(a) * n.y);
-    col.a *= mix(min(bands, 1.0), 1.0, a * a * a);
-    col.a *= 2.0;
-    col.b *= 1.0 + bands * bands * 0.5;
+    col.a *= min(bands + 0.3 * a * a, 1.0);
+    // col.a *= 2.0;
     // col.a = 1.0;
-    // col.rgb = vec3(fbm(x));
+    // col.rgb = vec3(a);
     return col; 
 }
 
 void main()
 {
     float min_res = min(resolution.x, resolution.y);
-    vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min_res * 1.25;
+    vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min_res;
     gl_FragColor = aurora_col(uv);
 }

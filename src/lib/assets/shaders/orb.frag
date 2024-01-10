@@ -106,6 +106,7 @@ vec3 lcol(float n) {
 }
 
 vec3 star_layer(vec2 uv, float t) {
+    uv *= 0.7;
     vec3 col = vec3(0);
     vec2 gv = fract(uv);
     vec2 id = floor(uv);
@@ -116,7 +117,7 @@ vec3 star_layer(vec2 uv, float t) {
             float n = hash21(id + offs);
             n *= n;
             vec2 p = gv - offs - vec2(n, fract(n * 34.)) + .5;
-            float m = .75 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;
+            float m = 1.0 + 0.03 * sin(t * 6. + n) + length(uv) * 0.1;
             m /= n + 0.3;
             p *= m;
             float s = star(p, 1. / m);

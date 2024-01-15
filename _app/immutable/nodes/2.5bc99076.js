@@ -326,7 +326,7 @@ vec3 hue_shift(vec3 c, float s){\r
 }\r
 \r
 vec4 aurora_col(vec2 x) {\r
-    x.y = abs(x.y);\r
+    // x.y = abs(x.y);\r
     x *= vec2(1.0, 1.5);\r
     float t = time * 0.1;\r
     vec3 n = get_normal(x);\r

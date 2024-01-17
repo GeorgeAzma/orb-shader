@@ -1,4 +1,4 @@
-import{s as I,n as g,o as q,b as G}from"../chunks/scheduler.e108d1fd.js";import{S as N,i as O,g as x,h as _,j as b,f as p,k as h,a as U,r as R,s as M,u as z,c as H,x as k,v as D,d as E,t as C,w as T}from"../chunks/index.7cf2deec.js";function V(i){let n;return{c(){n=x("canvas"),this.h()},l(t){n=_(t,"CANVAS",{id:!0}),b(n).forEach(p),this.h()},h(){h(n,"id","background-shader")},m(t,s){U(t,n,s),i[3](n)},p:g,i:g,o:g,d(t){t&&p(n),i[3](null)}}}function j(i,n,t){let{frag:s=""}=n,{vert:l=""}=n,o,e,r,c=performance.now();const f=[-1,-1,1,-1,-1,1,1,1];let u;function d(){if(o&&(t(0,o.width=window.innerWidth,o),t(0,o.height=window.innerHeight,o),r&&e)){const a=r.getUniformLocation(e,"resolution");r.uniform2f(a,o.width,o.height),r.viewport(0,0,o.width,o.height)}}q(()=>{if(r=o.getContext("webgl"),!r){console.error("WebGL is not supported in this browser.");return}return u=r.createBuffer(),r.bindBuffer(r.ARRAY_BUFFER,u),r.bufferData(r.ARRAY_BUFFER,new Float32Array(f),r.STATIC_DRAW),r.enable(r.BLEND),r.blendFunc(r.SRC_ALPHA,r.ONE_MINUS_SRC_ALPHA),c=performance.now(),window.addEventListener("resize",d),S(l,s),()=>{window.removeEventListener("resize",d)}});function S(a,y){if(y||(y="precision mediump float;void main() {gl_FragColor=vec4(1);}"),a||(a="attribute vec4 a_position;void main() {gl_Position = a_position;}"),!r)return;const v=r.createShader(r.FRAGMENT_SHADER);if(!v){console.error("Could not create fragment shader"),r.deleteShader(v);return}if(r.shaderSource(v,y),r.compileShader(v),!r.getShaderParameter(v,r.COMPILE_STATUS)){const A=r.getShaderInfoLog(v);console.error("Fragment shader compilation error:",A)}const m=r.createShader(r.VERTEX_SHADER);if(!m){console.error("Could not create vertex shader"),r.deleteShader(m);return}if(r.shaderSource(m,a),r.compileShader(m),!r.getShaderParameter(m,r.COMPILE_STATUS)){const A=r.getShaderInfoLog(m);console.error("Vertex shader compilation error:",A)}if(e&&(r.deleteProgram(e),e=null),e=r.createProgram(),!e){console.error("Could not create shader program");return}r.attachShader(e,v),r.attachShader(e,m),r.linkProgram(e),r.deleteShader(v),r.deleteShader(m),r.useProgram(e);const w=r.getAttribLocation(e,"a_position");r.enableVertexAttribArray(w),r.vertexAttribPointer(w,2,r.FLOAT,!1,0,0),d(),F()}function F(){if(!(o&&r&&e))return;r.clearColor(0,0,0,0),r.clear(r.COLOR_BUFFER_BIT),r.useProgram(e),r.bindBuffer(r.ARRAY_BUFFER,u),r.drawArrays(r.TRIANGLE_STRIP,0,4);const a=r.getUniformLocation(e,"time");a&&r.uniform1f(a,(performance.now()-c)/1e3),requestAnimationFrame(F)}function B(a){G[a?"unshift":"push"](()=>{o=a,t(0,o)})}return i.$$set=a=>{"frag"in a&&t(1,s=a.frag),"vert"in a&&t(2,l=a.vert)},i.$$.update=()=>{i.$$.dirty&6&&S(l,s)},[o,s,l,B]}class L extends N{constructor(n){super(),O(this,n,j,V,I,{frag:1,vert:2})}}const P=`attribute vec4 a_position;\r
+import{s as I,n as g,o as q,b as G}from"../chunks/scheduler.e108d1fd.js";import{S as N,i as O,g as x,h as _,j as b,f as p,k as h,a as U,r as R,s as M,u as z,c as H,x as k,v as D,d as E,t as C,w as T}from"../chunks/index.7cf2deec.js";function V(i){let n;return{c(){n=x("canvas"),this.h()},l(t){n=_(t,"CANVAS",{id:!0}),b(n).forEach(p),this.h()},h(){h(n,"id","background-shader")},m(t,s){U(t,n,s),i[3](n)},p:g,i:g,o:g,d(t){t&&p(n),i[3](null)}}}function j(i,n,t){let{frag:s=""}=n,{vert:l=""}=n,o,e,r,c=performance.now();const f=[-1,-1,1,-1,-1,1,1,1];let u;function d(){if(o&&(t(0,o.width=window.innerWidth,o),t(0,o.height=window.innerHeight,o),r&&e)){const a=r.getUniformLocation(e,"resolution");r.uniform2f(a,o.width,o.height),r.viewport(0,0,o.width,o.height)}}q(()=>{if(r=o.getContext("webgl"),!r){console.error("WebGL is not supported in this browser.");return}return u=r.createBuffer(),r.bindBuffer(r.ARRAY_BUFFER,u),r.bufferData(r.ARRAY_BUFFER,new Float32Array(f),r.STATIC_DRAW),r.enable(r.BLEND),r.blendFunc(r.SRC_ALPHA,r.ONE_MINUS_SRC_ALPHA),c=performance.now(),window.addEventListener("resize",d),S(l,s),()=>{window.removeEventListener("resize",d)}});function S(a,y){if(y||(y="precision mediump float;void main() {gl_FragColor=vec4(1);}"),a||(a="attribute vec4 a_position;void main() {gl_Position = a_position;}"),!r)return;const v=r.createShader(r.FRAGMENT_SHADER);if(!v){console.error("Could not create fragment shader"),r.deleteShader(v);return}if(r.shaderSource(v,y),r.compileShader(v),!r.getShaderParameter(v,r.COMPILE_STATUS)){const A=r.getShaderInfoLog(v);console.error("Fragment shader compilation error:",A)}const m=r.createShader(r.VERTEX_SHADER);if(!m){console.error("Could not create vertex shader"),r.deleteShader(m);return}if(r.shaderSource(m,a),r.compileShader(m),!r.getShaderParameter(m,r.COMPILE_STATUS)){const A=r.getShaderInfoLog(m);console.error("Vertex shader compilation error:",A)}if(e&&(r.deleteProgram(e),e=null),e=r.createProgram(),!e){console.error("Could not create shader program");return}r.attachShader(e,v),r.attachShader(e,m),r.linkProgram(e),r.deleteShader(v),r.deleteShader(m),r.useProgram(e);const F=r.getAttribLocation(e,"a_position");r.enableVertexAttribArray(F),r.vertexAttribPointer(F,2,r.FLOAT,!1,0,0),d(),w()}function w(){if(!(o&&r&&e))return;r.clearColor(0,0,0,0),r.clear(r.COLOR_BUFFER_BIT),r.useProgram(e),r.bindBuffer(r.ARRAY_BUFFER,u),r.drawArrays(r.TRIANGLE_STRIP,0,4);const a=r.getUniformLocation(e,"time");a&&r.uniform1f(a,(performance.now()-c)/1e3),requestAnimationFrame(w)}function B(a){G[a?"unshift":"push"](()=>{o=a,t(0,o)})}return i.$$set=a=>{"frag"in a&&t(1,s=a.frag),"vert"in a&&t(2,l=a.vert)},i.$$.update=()=>{i.$$.dirty&6&&S(l,s)},[o,s,l,B]}class L extends N{constructor(n){super(),O(this,n,j,V,I,{frag:1,vert:2})}}const P=`attribute vec4 a_position;\r
 \r
 void main() {\r
     gl_Position = a_position;\r
@@ -177,14 +177,13 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
         col.rgb += a * .25;\r
 \r
         nr.xy = rot2D(nr.xy, -t * 2.4);\r
-        r = noise(nr.xy * l + 221.126) * 0.35;\r
+        r = noise(nr.xy * l + 221.126) * 0.4;\r
         col.rgb = hue_shift(col.rgb, mask * r);\r
         col.rgb += r * r * r * r * 0.25;\r
         col.a += mask * r / (1. + l);\r
         col.a = aces(col.a);\r
-        col.rgb *= abs(col.rgb);\r
-        col.rgb = aces(col.rgb * 0.8) * 1.1;\r
         col.a *= smoothstep(-0.3, 0.2, l);\r
+        col.rgb *= abs(col.rgb);\r
 \r
         /// Stars\r
         const float STAR_FREQ = 12.;\r
@@ -205,11 +204,14 @@ vec4 orb(vec2 uv, float t, float min_res) {\r
         col.rgb += mask * 0.25 * pow(l + 0.05, 4.);\r
         col.a += mask * pow(l + 0.1, 8.);\r
         \r
-        r = noise(uv * l * 1.5 - 513.26 + t * 0.2) - 0.5;\r
-        col.rgb = hue_shift(col.rgb, mask * r);\r
+        r = noise(uv * l * 1.4 - 513.26 + t * 0.2) - 0.5;\r
+        col.rgb = hue_shift(col.rgb, mask * r * 1.25);\r
+        \r
+        col.rgb = aces(col.rgb * 0.7) * 1.2;\r
 \r
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);\r
-        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1. + col.g * 2. - col.r));\r
+        col.rg *= 1.0 - pow(l, 8.0);\r
+        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1.));\r
     } \r
     \r
     if (alpha < 1.) {\r
@@ -314,7 +316,7 @@ float aurora(vec2 x) {\r
 }\r
 \r
 vec3 get_normal(vec2 uv) {\r
-    vec2 e = vec2(0.1, 0);\r
+    vec2 e = vec2(0.16, 0);\r
     float nx = (aurora(uv - e.xy) - aurora(uv + e.xy)) / (2.0 * e.x);\r
     float ny = (aurora(uv - e.yx) - aurora(uv + e.yx)) / (2.0 * e.x);\r
     vec3 n = normalize(vec3(nx, ny, -1.));\r
@@ -326,8 +328,7 @@ vec3 hue_shift(vec3 c, float s){\r
 }\r
 \r
 vec4 aurora_col(vec2 x) {\r
-    // x.y = abs(x.y);\r
-    x *= vec2(1.0, 1.5);\r
+    x *= vec2(1.5, 2.3);\r
     float t = time * 0.1;\r
     vec3 n = get_normal(x);\r
     float a = aurora(x);\r

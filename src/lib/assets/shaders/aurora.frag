@@ -49,7 +49,7 @@ float aurora(vec2 x) {
 }
 
 vec3 get_normal(vec2 uv) {
-    vec2 e = vec2(0.1, 0);
+    vec2 e = vec2(0.16, 0);
     float nx = (aurora(uv - e.xy) - aurora(uv + e.xy)) / (2.0 * e.x);
     float ny = (aurora(uv - e.yx) - aurora(uv + e.yx)) / (2.0 * e.x);
     vec3 n = normalize(vec3(nx, ny, -1.));
@@ -61,8 +61,7 @@ vec3 hue_shift(vec3 c, float s){
 }
 
 vec4 aurora_col(vec2 x) {
-    // x.y = abs(x.y);
-    x *= vec2(1.0, 1.5);
+    x *= vec2(1.5, 2.3);
     float t = time * 0.1;
     vec3 n = get_normal(x);
     float a = aurora(x);

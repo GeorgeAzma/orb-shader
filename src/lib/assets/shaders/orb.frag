@@ -173,14 +173,13 @@ vec4 orb(vec2 uv, float t, float min_res) {
         col.rgb += a * .25;
 
         nr.xy = rot2D(nr.xy, -t * 2.4);
-        r = noise(nr.xy * l + 221.126) * 0.35;
+        r = noise(nr.xy * l + 221.126) * 0.4;
         col.rgb = hue_shift(col.rgb, mask * r);
         col.rgb += r * r * r * r * 0.25;
         col.a += mask * r / (1. + l);
         col.a = aces(col.a);
-        col.rgb *= abs(col.rgb);
-        col.rgb = aces(col.rgb * 0.8) * 1.1;
         col.a *= smoothstep(-0.3, 0.2, l);
+        col.rgb *= abs(col.rgb);
 
         /// Stars
         const float STAR_FREQ = 12.;
@@ -201,11 +200,14 @@ vec4 orb(vec2 uv, float t, float min_res) {
         col.rgb += mask * 0.25 * pow(l + 0.05, 4.);
         col.a += mask * pow(l + 0.1, 8.);
         
-        r = noise(uv * l * 1.5 - 513.26 + t * 0.2) - 0.5;
-        col.rgb = hue_shift(col.rgb, mask * r);
+        r = noise(uv * l * 1.4 - 513.26 + t * 0.2) - 0.5;
+        col.rgb = hue_shift(col.rgb, mask * r * 1.25);
+        
+        col.rgb = aces(col.rgb * 0.7) * 1.2;
 
         float df = mask * smoothstep(0.9 - f, 0.9 + f, l);
-        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1. + col.g * 2. - col.r));
+        col.rg *= 1.0 - pow(l, 8.0);
+        col.rgb = hue_shift(col.rgb, df * (2.5 * smoothstep(-f, f, uv.x * cos(t * 0.4) - uv.y * sin(t * 0.4)) - 1.));
     } 
     
     if (alpha < 1.) {
